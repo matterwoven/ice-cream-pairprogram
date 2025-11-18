@@ -19,8 +19,14 @@ app.use(express.static('public'));
 const PORT = 3001;
 
 app.get('/db-test', async(req, res) => {
-    
-})
+    try {
+        const [orders] = await pool.query('SELECT * FROM orders');
+        res.send(orders);
+    }   catch (err) {
+        console.error('Database error:', err);
+        res.status(500).send('Database error: ' + err.message);
+    }
+});
 
 app.get('/', (req, res) => {
     res.sendFile(`${import.meta.dirname}/views/home.html`);
