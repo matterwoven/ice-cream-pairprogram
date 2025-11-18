@@ -1,11 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Confirmation</title>
-</head>
-<body>
-    <p><%= order %></p>
-</body>
+    <link rel="stylesheet" href="styles/confirm.css" />
+        <!-- Favicon -->
+    <link rel="icon" href="images/icecream.png" />
+  </head>
+  <body>
+    <main class="main-body">
+      <form>
+        <div class="image">
+          <img
+            src="images/checkmark.png"
+            alt="picture of checkmark"
+            width="100"
+          />
+        </div>
+        <div class="heading-container">
+          <h1>Thank You for Your Order!</h2>
+          <p>Your ice cream order has been confirmed!</p>
+        </div>
+
+        <div id="personal-info-container">
+          <h2>Personal information</h2>
+          <div>
+            <div>
+              <p>Name: <%= order.fname %></p>
+              <p>Email: <%= order.email %></p>
+            </div>
+          </div>
+        </div>
+        <div class="order-details">
+          <h2>Order Details</h2>
+          <p>Flavor: <%= order.flavor %></p>
+          <p>Cone Type: <%= order.cone %></p>
+          <p>Toppings</p>
+          <ul>
+            <% order.toppings.forEach(order => { %>
+              <li><%= order %></li>
+           <% }) %>
+          </ul>
+        </div>
+        <div><h4>Additional Comments</h4><p><%= order.comment %></p></div>
+        <div class="button-section">
+          <button id="print-button">Print Order</button>
+          <a id="place-button" href="/">Place Another Order</a>
+        </div>
+        <p><a class="admin_link" href="/admin">Go to Admin page</a></p>
+      </form>
+    </main>
+  </body>
 </html>

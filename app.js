@@ -48,9 +48,9 @@ app.get('/admin', async(req, res) => {
 })
 
 app.post('/submit-order', (req, res) => {
-    let body = req.body;
+    let order = req.body;
     console.log(req.body);
-    res.render('confirm', {body});
+    res.render('confirm', {order});
 })
 
 
