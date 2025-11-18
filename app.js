@@ -47,11 +47,12 @@ app.get('/admin', async(req, res) => {
     }
 })
 
-app.post('/submit-order', (req, res) => {
-    let order = req.body;
-    console.log(req.body);
-    res.render('confirm', {order});
-})
+// app.post('/submit-order', (req, res) => {
+//     let order = req.body;
+//     // insert rec into db
+//     console.log(req.body);
+//     res.render('confirm', {order});
+// })
 
 
 app.post('/confirm', async (req, res) => {
@@ -62,23 +63,31 @@ app.post('/confirm', async (req, res) => {
         
         order.toppings = Array.isArray(order.toppings) ?
         order.toppings.join(", ") : "";
+
+        order.timestamp = new Date();
         
         const sql = 
-        `INSERT INTO orders(customer, email, flavor, cone, toppings)
-        VALUES (?, ?, ?, ?, ?);`;
-        
+        `INSERT INTO orders(timestamp, customer, email, flavor, cone, toppings)
+        VALUES (?, ?, ?, ?, ?, ?);`;
         const params = [
-            order.customer,
+            order.timestamp,
+            order.fname,
             order.email,
             order.flavor,
             order.cone,
-            order.toppings
+            order.toppings,
         ];
         
         const [result] = await pool.execute(sql, params);
         console.log('Order saved with ID: ', result.insertId);
         
-        res.render('confirmation', { order });
+        // res.render('confirm', { order });
+        res.render('confirm', { 
+            order: {
+                ...order,
+                toppings: order.toppings ? order.toppings.split(", ") : []
+            }
+        });
         
     } catch (err) {
         console.error('Error saving order:', err);
