@@ -17,6 +17,8 @@ app.set('view engine', 'ejs');
 // Enable static file serving (client side file that does not communicate with database)
 app.use(express.static('public'));
 
+app.use(express.urlencoded({extended: true}));
+
 const PORT = 3001;
 
 app.get('/db-test', async(req, res) => {
@@ -30,7 +32,8 @@ app.get('/db-test', async(req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(`${import.meta.dirname}/views/home.html`);
+    // res.sendFile(`${import.meta.dirname}/views/home.html`);
+    res.render('home');
 })
 
 app.get('/admin', async(req, res) => {
@@ -44,8 +47,10 @@ app.get('/admin', async(req, res) => {
     }
 })
 
-app.post('/submit', (req, res) => {
+app.post('/submit-order', (req, res) => {
+    let body = req.body;
     console.log(req.body);
+    res.render('confirm', {body});
 })
 
 
