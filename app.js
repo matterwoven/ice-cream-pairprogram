@@ -44,23 +44,24 @@ app.get('/admin', async(req, res) => {
     }
 })
 
-app.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
+app.post('/submit', (req, res) => {
+    console.log(req.body);
 })
+
 
 app.post('/confirm', async (req, res) => {
     try {
         const order = req.body;
-
+        
         console.log('New order submitted:', order);
-
+        
         order.toppings = Array.isArray(order.toppings) ?
         order.toppings.join(", ") : "";
-
+        
         const sql = 
-            `INSERT INTO orders(customer, email, flavor, cone, toppings)
-            VALUES (?, ?, ?, ?, ?);`;
-
+        `INSERT INTO orders(customer, email, flavor, cone, toppings)
+        VALUES (?, ?, ?, ?, ?);`;
+        
         const params = [
             order.customer,
             order.email,
@@ -68,14 +69,18 @@ app.post('/confirm', async (req, res) => {
             order.cone,
             order.toppings
         ];
-
+        
         const [result] = await pool.execute(sql, params);
         console.log('Order saved with ID: ', result.insertId);
-
+        
         res.render('confirmation', { order });
+        
+    } catch (err) {
+        console.error('Error saving order:', err);
+        res.status(500).send('Sorry, there was an error processing your order. Please try again')
+    }
+});
 
-        } catch (err) {
-            console.error('Error saving order:', err);
-            res.status(500).send('Sorry, there was an error processing your order. Please try again')
-        }
-    });
+app.listen(PORT, () => {
+    console.log(`Server is running at http://localhost:${PORT}`);
+})
