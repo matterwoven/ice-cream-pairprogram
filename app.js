@@ -12,6 +12,7 @@ const pool = mysql2.createPool({
 }).promise();
 
 const app = express();
+app.set('view engine', 'ejs');
 
 // Enable static file serving (client side file that does not communicate with database)
 app.use(express.static('public'));
