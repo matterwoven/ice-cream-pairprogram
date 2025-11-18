@@ -32,6 +32,17 @@ app.get('/', (req, res) => {
     res.sendFile(`${import.meta.dirname}/views/home.html`);
 })
 
+app.get('/admin', async(req, res) => {
+    try {
+        const [orders] = await pool.query('SELECT * FROM orders ORDER BY timestamp DESC');
+        res.render('admin', { orders });
+    } catch (err) {
+        console.error('Database error:', err);
+        res.status(500).send('Error loading orders ' + err.message);
+
+    }
+})
+
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
 })
